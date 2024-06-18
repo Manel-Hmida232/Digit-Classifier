@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Classifier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #uploadedImage {
+            max-width: 100%;
+            margin: 20px auto; /* Center the image and add margin */
+            display: none; /* Initially hide the image */
+            width: 150px; /* Set fixed width */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        #imageFile {
+            display: none;
+        }
+
+        label {
+            display: block;
+            background-color: #009688;
+            color: #fff;
+            padding: 15px 40px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        button[type="button"] {
+            background-color: #009688;
+            color: #fff;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Digit Classifier</h1>
+        <form id="imageForm" enctype="multipart/form-data">
+            <label for="imageFile">Upload Image</label>
+            <input type="file" name="imageFile" id="imageFile" onchange="previewImage(event)">
+            <img id="uploadedImage" src="#" alt="Uploaded Image"> <!-- Image tag under Upload Image -->
+            <button type="button" onclick="predict()">Predict</button>
+        </form>
+        <div id="prediction"></div>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            var input = event.target;
+            var reader = new FileReader();
+            reader.onload = function(){
+                var img = document.getElementById('uploadedImage');
+                img.style.display = 'block'; // Display the uploaded image
+                img.src = reader.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        function predict() {
+            var formData = new FormData(document.getElementById('imageForm'));
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('prediction').innerHTML = 'Predicted Number: ' + data.prediction;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
