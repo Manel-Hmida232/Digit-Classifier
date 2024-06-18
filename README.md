@@ -1,4 +1,4 @@
-This project is designed to recognize and assign labels (classes) to images based on their visual characteristics using advanced machine learning techniques. 
+This project is designed to recognize and assign labels to images based on their visual characteristics using advanced machine learning techniques. 
 The application leverages two prominent machine learning models:
 
 Support Vector Machines (SVM)
